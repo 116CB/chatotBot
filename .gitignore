@@ -1,0 +1,3 @@
+*.json
+databases/*
+__pycache__
