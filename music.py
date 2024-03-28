@@ -98,7 +98,7 @@ class Music(commands.Cog):
 
     @commands.command(name="resume", aliases=["r"], help="Resumes the track Chatot was playing.")
     async def resume(self, ctx):
-        if self.is_paused:
+        if self.is_playing is True and self.is_paused:
             self.is_playing = True
             self.is_paused = False
             self.vc.resume()

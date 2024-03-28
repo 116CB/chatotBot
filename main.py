@@ -5,11 +5,11 @@ import json
 import os
 
 from music import Music
+from movesearch import search_moves, format_embed
 
 configPath = os.getcwd() + "/config.json"
 
 if os.path.exists(configPath):
-
     with open("./config.json") as f:
         configData = json.load(f)
 else:
@@ -32,12 +32,25 @@ chatot.help_command = PrettyHelp(navigation=menu, color=discord.Color.lighter_gr
 async def on_ready():
     print(f"{chatot.user} is running!")
     await chatot.add_cog(Music(chatot))
-    await chatot.tree.sync()
+    print(f"{chatot.user} is running!")
 
 
-@chatot.tree.command(name="slash")
+@chatot.command()
+async def nms(ctx, *, pokemon_list):
+    if not pokemon_list:
+        await ctx.send("Please provide at least one Pokemon.")
+        return
+
+    pokemon_list = [pokemon.strip() for pokemon in pokemon_list.split(',')]
+    results = await search_moves(pokemon_list)
+
+    embed = await format_embed(results)
+
+    await ctx.send(embed=embed)
+
+
+@chatot.tree.command(name="test")
 async def slash(interaction: discord.Interaction):
-    await interaction.response.send_message("You must have had a bad dream or something!")
-
+    await interaction.response.send_message("test")
 
 chatot.run(token)
